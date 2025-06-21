@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iconic Gauge</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="gauge-wrapper">
+    <div class="gauge">
+      <div class="bezel">
+        <div class="screw screw-1"></div>
+        <div class="screw screw-2"></div>
+        <div class="screw screw-3"></div>
+        <div class="screw screw-4"></div>
+        <div class="screw screw-5"></div>
+        <div class="screw screw-6"></div>
+      </div>
+      <div class="inner-gauge">
+        <div class="dial"></div>
+        <div class="tick-marks">
+          <div class="tick major tick-0"></div>
+          <div class="tick minor tick-10"></div>
+          <div class="tick minor tick-20"></div>
+          <div class="tick major tick-25"></div>
+          <div class="tick minor tick-30"></div>
+          <div class="tick minor tick-40"></div>
+          <div class="tick major tick-50"></div>
+          <div class="tick minor tick-60"></div>
+          <div class="tick minor tick-70"></div>
+          <div class="tick major tick-75"></div>
+          <div class="tick minor tick-80"></div>
+          <div class="tick minor tick-90"></div>
+          <div class="tick major tick-100"></div>
+        </div>
+        <div class="needle" id="needle"></div>
+        <div class="center-jewel"></div>
+        <div class="analog-digits" id="digitDisplay">88</div>
+        <div class="glass-layer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateGauge(value) {
+      const angle = (value / 100) * 180 - 90;
+      document.getElementById("needle").style.transform = `rotate(${angle}deg)`;
+      document.getElementById("digitDisplay").textContent = value.toString().padStart(2, '0');
+    }
+
+    setInterval(() => {
+      const val = Math.floor(Math.random() * 100);
+      updateGauge(val);
+    }, 3000);
+  </script>
+</body>
+</html>
