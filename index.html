@@ -43,12 +43,56 @@
   </div>
 
   <script>
-    function updateGauge(value) {
+    let currentValue = 0;
+    let targetValue = 0;
+    let animationFrame = null;
+    
+    function updateGauge(value, instant = false) {
+      targetValue = value;
+      
+      if (instant) {
+        currentValue = value;
+        applyValue(value);
+        return;
+      }
+      
+      if (!animationFrame) {
+        animateNeedle();
+      }
+    }
+    
+    function animateNeedle() {
+      const diff = targetValue - currentValue;
+      const step = diff * 0.08;
+      
+      if (Math.abs(diff) < 0.1) {
+        currentValue = targetValue;
+        animationFrame = null;
+      } else {
+        currentValue += step;
+        animationFrame = requestAnimationFrame(animateNeedle);
+      }
+      
+      applyValue(currentValue);
+    }
+    
+    function applyValue(value) {
       const angle = (value / 100) * 180 - 90;
-      document.getElementById("needle").style.transform = `rotate(${angle}deg)`;
-      document.getElementById("digitDisplay").textContent = value.toString().padStart(2, '0');
+      const needle = document.getElementById("needle");
+      
+      needle.style.transform = `rotate(${angle}deg) translateX(-50%)`;
+      
+      if (Math.abs(targetValue - currentValue) > 20) {
+        needle.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+      } else {
+        needle.style.transition = 'transform 0.8s cubic-bezier(0.15, 0, 0.25, 1)';
+      }
+      
+      document.getElementById("digitDisplay").textContent = Math.round(value).toString().padStart(2, '0');
     }
 
+    updateGauge(0, true);
+    
     setInterval(() => {
       const val = Math.floor(Math.random() * 100);
       updateGauge(val);
