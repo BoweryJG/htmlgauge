@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iconic Gauge</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="gauge-wrapper">
+    <div class="gauge">
+      <div class="bezel">
+        <div class="screw screw-1"></div>
+        <div class="screw screw-2"></div>
+        <div class="screw screw-3"></div>
+        <div class="screw screw-4"></div>
+        <div class="screw screw-5"></div>
+        <div class="screw screw-6"></div>
+      </div>
+      <div class="inner-gauge">
+        <div class="dial"></div>
+        <div class="tick-marks">
+          <div class="tick major tick-0"></div>
+          <div class="tick minor tick-10"></div>
+          <div class="tick minor tick-20"></div>
+          <div class="tick major tick-25"></div>
+          <div class="tick minor tick-30"></div>
+          <div class="tick minor tick-40"></div>
+          <div class="tick major tick-50"></div>
+          <div class="tick minor tick-60"></div>
+          <div class="tick minor tick-70"></div>
+          <div class="tick major tick-75"></div>
+          <div class="tick minor tick-80"></div>
+          <div class="tick minor tick-90"></div>
+          <div class="tick major tick-100"></div>
+        </div>
+        <div class="needle" id="needle"></div>
+        <div class="center-jewel"></div>
+        <div class="glass-overlay"></div>
+        <div class="analog-digits" id="digitDisplay">88</div>
+        <div class="glass-layer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentValue = 0;
+    let targetValue = 0;
+    let animationFrame = null;
+    
+    function updateGauge(value, instant = false) {
+      targetValue = value;
+      
+      if (instant) {
+        currentValue = value;
+        applyValue(value);
+        return;
+      }
+      
+      if (!animationFrame) {
+        animateNeedle();
+      }
+    }
+    
+    function animateNeedle() {
+      const diff = targetValue - currentValue;
+      const step = diff * 0.08;
+      
+      if (Math.abs(diff) < 0.1) {
+        currentValue = targetValue;
+        animationFrame = null;
+      } else {
+        currentValue += step;
+        animationFrame = requestAnimationFrame(animateNeedle);
+      }
+      
+      applyValue(currentValue);
+    }
+    
+    function applyValue(value) {
+      const angle = (value / 100) * 180 - 90;
+      const needle = document.getElementById("needle");
+      
+      needle.style.transform = `rotate(${angle}deg) translateX(-50%)`;
+      
+      if (Math.abs(targetValue - currentValue) > 20) {
+        needle.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+      } else {
+        needle.style.transition = 'transform 0.8s cubic-bezier(0.15, 0, 0.25, 1)';
+      }
+      
+      document.getElementById("digitDisplay").textContent = Math.round(value).toString().padStart(2, '0');
+    }
+
+    updateGauge(0, true);
+    
+    setInterval(() => {
+      const val = Math.floor(Math.random() * 100);
+      updateGauge(val);
+    }, 3000);
+  </script>
+</body>
+</html>

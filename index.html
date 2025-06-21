@@ -3,100 +3,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Iconic Gauge</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Gauge Versions Gallery</title>
+  <style>
+    body {
+      background: #111;
+      color: #ccc;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00e5ff;
+      text-shadow: 0 0 10px #00ffff66;
+      margin-bottom: 40px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .version-card {
+      background: #1a1a1a;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .version-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    .version-card h2 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    .version-card p {
+      color: #888;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .preview-frame {
+      width: 100%;
+      height: 320px;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      margin-bottom: 15px;
+    }
+
+    .view-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #00e5ff, #0099cc);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+    }
+
+    .view-link:hover {
+      background: linear-gradient(135deg, #00ffff, #00b3e6);
+      box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .features {
+      text-align: left;
+      margin: 15px 0;
+      font-size: 0.9em;
+    }
+
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      padding: 5px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #00e5ff;
+    }
+  </style>
 </head>
 <body>
-  <div class="gauge-wrapper">
-    <div class="gauge">
-      <div class="bezel">
-        <div class="screw screw-1"></div>
-        <div class="screw screw-2"></div>
-        <div class="screw screw-3"></div>
-        <div class="screw screw-4"></div>
-        <div class="screw screw-5"></div>
-        <div class="screw screw-6"></div>
+  <h1>Iconic Gauge - Version Gallery</h1>
+
+  <div class="gallery">
+    <div class="version-card">
+      <h2>V1 - Basic</h2>
+      <p>The original design with simple dial and needle</p>
+      <iframe src="gauge-v1-basic.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Basic dial face</li>
+          <li>Simple red needle</li>
+          <li>Digital display</li>
+          <li>Center jewel</li>
+        </ul>
       </div>
-      <div class="inner-gauge">
-        <div class="dial"></div>
-        <div class="tick-marks">
-          <div class="tick major tick-0"></div>
-          <div class="tick minor tick-10"></div>
-          <div class="tick minor tick-20"></div>
-          <div class="tick major tick-25"></div>
-          <div class="tick minor tick-30"></div>
-          <div class="tick minor tick-40"></div>
-          <div class="tick major tick-50"></div>
-          <div class="tick minor tick-60"></div>
-          <div class="tick minor tick-70"></div>
-          <div class="tick major tick-75"></div>
-          <div class="tick minor tick-80"></div>
-          <div class="tick minor tick-90"></div>
-          <div class="tick major tick-100"></div>
-        </div>
-        <div class="needle" id="needle"></div>
-        <div class="center-jewel"></div>
-        <div class="analog-digits" id="digitDisplay">88</div>
-        <div class="glass-layer"></div>
+      <a href="gauge-v1-basic.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V2 - Enhanced</h2>
+      <p>Added metallic bezel with screws and tick marks</p>
+      <iframe src="gauge-v2-enhanced.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Metallic bezel with 6 screws</li>
+          <li>Major and minor tick marks</li>
+          <li>Glass layer reflection</li>
+          <li>Bebas Neue font</li>
+        </ul>
       </div>
+      <a href="gauge-v2-enhanced.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V3 - Cinematic</h2>
+      <p>Brushed aluminum dial with enhanced lighting</p>
+      <iframe src="gauge-v3-cinematic.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Brushed aluminum texture</li>
+          <li>Enhanced needle with counterweight</li>
+          <li>Smooth animation with inertia</li>
+          <li>Cinematic lighting effects</li>
+        </ul>
+      </div>
+      <a href="gauge-v3-cinematic.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V4 - Refined Glass</h2>
+      <p>Final refinements with subtle glass overlay</p>
+      <iframe src="gauge-v4-refined.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Subtle glass overlay with blur</li>
+          <li>Refined needle counterweight</li>
+          <li>Adjusted digit positioning</li>
+          <li>Multiple glass reflection layers</li>
+        </ul>
+      </div>
+      <a href="gauge-v4-refined.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V5 - Triangular Needle</h2>
+      <p>Redesigned with sharp triangular needle</p>
+      <iframe src="gauge-v5-triangular.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Pure CSS triangular needle</li>
+          <li>Enhanced bounce animation</li>
+          <li>Delayed animation timing</li>
+          <li>Sharp geometric design</li>
+        </ul>
+      </div>
+      <a href="gauge-v5-triangular.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V6 - Data Driven</h2>
+      <p>API-ready with calibration sequence</p>
+      <iframe src="gauge-v6-data-driven.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Data fetching capability</li>
+          <li>Pre-spin calibration</li>
+          <li>Interactive controls</li>
+          <li>Status indicators</li>
+        </ul>
+      </div>
+      <a href="gauge-v6-data-driven.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V7 - Crystal Glint</h2>
+      <p>Simplified with single crystal reflection</p>
+      <iframe src="gauge-v7-crystal-glint.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Single crystal glint layer</li>
+          <li>Cleaner, minimal glass effect</li>
+          <li>Subtle inset shadows</li>
+          <li>Performance optimized</li>
+        </ul>
+      </div>
+      <a href="gauge-v7-crystal-glint.html" class="view-link">View Full Version</a>
+    </div>
+
+    <div class="version-card">
+      <h2>V8 - Inverted Needle</h2>
+      <p>Flipped triangle with dual shadows</p>
+      <iframe src="gauge-v8-inverted-needle.html" class="preview-frame"></iframe>
+      <div class="features">
+        <ul>
+          <li>Inverted triangle design</li>
+          <li>Top-centered transform origin</li>
+          <li>Dual drop shadow effects</li>
+          <li>Wider needle base (10px)</li>
+        </ul>
+      </div>
+      <a href="gauge-v8-inverted-needle.html" class="view-link">View Full Version</a>
     </div>
   </div>
-
-  <script>
-    let currentValue = 0;
-    let targetValue = 0;
-    let animationFrame = null;
-    
-    function updateGauge(value, instant = false) {
-      targetValue = value;
-      
-      if (instant) {
-        currentValue = value;
-        applyValue(value);
-        return;
-      }
-      
-      if (!animationFrame) {
-        animateNeedle();
-      }
-    }
-    
-    function animateNeedle() {
-      const diff = targetValue - currentValue;
-      const step = diff * 0.08;
-      
-      if (Math.abs(diff) < 0.1) {
-        currentValue = targetValue;
-        animationFrame = null;
-      } else {
-        currentValue += step;
-        animationFrame = requestAnimationFrame(animateNeedle);
-      }
-      
-      applyValue(currentValue);
-    }
-    
-    function applyValue(value) {
-      const angle = (value / 100) * 180 - 90;
-      const needle = document.getElementById("needle");
-      
-      needle.style.transform = `rotate(${angle}deg) translateX(-50%)`;
-      
-      if (Math.abs(targetValue - currentValue) > 20) {
-        needle.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-      } else {
-        needle.style.transition = 'transform 0.8s cubic-bezier(0.15, 0, 0.25, 1)';
-      }
-      
-      document.getElementById("digitDisplay").textContent = Math.round(value).toString().padStart(2, '0');
-    }
-
-    updateGauge(0, true);
-    
-    setInterval(() => {
-      const val = Math.floor(Math.random() * 100);
-      updateGauge(val);
-    }, 3000);
-  </script>
 </body>
 </html>
