@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gauge V9 - Refined Needle</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .gauge-wrapper {
+      background: radial-gradient(#2a1f16, #0c0c0c);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 30px #00000088, 0 0 25px #552d0a33;
+    }
+
+    .gauge {
+      position: relative;
+      width: 260px;
+      height: 260px;
+    }
+
+    .bezel {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #888 0%, #999 25%, #555 50%, #777 75%, #999 100%);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 -2px 5px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.2);
+      z-index: 1;
+    }
+
+    .screw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #aaa 0%, #777 40%, #555 100%);
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), inset 0 -1px 2px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .screw::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 1px;
+      background: #333;
+      top: 4.5px;
+      left: 2px;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.5);
+    }
+
+    .screw-1 { top: 10%; left: 50%; transform: translateX(-50%) rotate(45deg); }
+    .screw-2 { top: 22%; right: 15%; transform: rotate(-30deg); }
+    .screw-3 { bottom: 22%; right: 15%; transform: rotate(30deg); }
+    .screw-4 { bottom: 10%; left: 50%; transform: translateX(-50%) rotate(-45deg); }
+    .screw-5 { bottom: 22%; left: 15%; transform: rotate(-30deg); }
+    .screw-6 { top: 22%; left: 15%; transform: rotate(30deg); }
+
+    .inner-gauge {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      top: 20px;
+      left: 20px;
+      border-radius: 50%;
+      background: 
+        radial-gradient(circle at 50% 50%, #e8e8e8 0%, #d5d5d5 20%, #bbb 40%, #999 60%, #777 80%, #555 100%),
+        repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 3px);
+      box-shadow: 
+        inset 0 0 30px rgba(0,0,0,0.4), 
+        inset 0 5px 15px rgba(0,0,0,0.6),
+        inset 0 -2px 5px rgba(255,255,255,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .inner-gauge::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: 
+        repeating-conic-gradient(from 0deg at 50% 50%, 
+          transparent 0deg, 
+          transparent 0.5deg, 
+          rgba(0,0,0,0.03) 0.5deg, 
+          rgba(0,0,0,0.03) 1deg);
+      opacity: 0.6;
+      z-index: 1;
+    }
+
+    .dial {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: none;
+      opacity: 0.08;
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .tick-marks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .tick {
+      position: absolute;
+      background: #ccc;
+      left: 50%;
+      top: 10px;
+      transform-origin: 50% 100px;
+      box-shadow: 0 0 2px rgba(255,255,255,0.5);
+    }
+
+    .tick.major {
+      width: 3px;
+      height: 15px;
+      margin-left: -1.5px;
+    }
+
+    .tick.minor {
+      width: 1px;
+      height: 10px;
+      margin-left: -0.5px;
+      opacity: 0.7;
+    }
+
+    .tick-0 { transform: rotate(-90deg); }
+    .tick-10 { transform: rotate(-72deg); }
+    .tick-20 { transform: rotate(-54deg); }
+    .tick-25 { transform: rotate(-45deg); }
+    .tick-30 { transform: rotate(-36deg); }
+    .tick-40 { transform: rotate(-18deg); }
+    .tick-50 { transform: rotate(0deg); }
+    .tick-60 { transform: rotate(18deg); }
+    .tick-70 { transform: rotate(36deg); }
+    .tick-75 { transform: rotate(45deg); }
+    .tick-80 { transform: rotate(54deg); }
+    .tick-90 { transform: rotate(72deg); }
+    .tick-100 { transform: rotate(90deg); }
+
+    .needle-container {
+      position: absolute;
+      top: 110px;
+      left: 110px;
+      width: 0;
+      height: 0;
+      transform-origin: 50% 0;
+      z-index: 4;
+    }
+
+    .needle-body {
+      position: relative;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 110px solid #cc2b2b;
+      transform: rotate(270deg);
+      transform-origin: top center;
+      transition: transform 1.4s cubic-bezier(0.23, 1.5, 0.32, 1);
+      filter: drop-shadow(0 -2px 4px rgba(255, 80, 80, 0.5));
+      z-index: 4;
+    }
+
+    .needle-body::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: -3px;
+      width: 6px;
+      height: 100px;
+      background: linear-gradient(to top, rgba(255,255,255,0.25), transparent 70%);
+      transform: skewX(-8deg);
+      pointer-events: none;
+    }
+
+    .needle-body::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle at 40% 40%, #880000, #330000);
+      border-radius: 50%;
+      top: -7px;
+      left: -7px;
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.6),
+        inset 1px 1px 2px rgba(255,255,255,0.2),
+        inset -1px -1px 2px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+
+    .center-jewel {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: radial-gradient(circle at 40% 40%, #ffdd44, #cc9900 50%, #664400);
+      border-radius: 50%;
+      top: 101px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      box-shadow: 
+        0 2px 4px rgba(0,0,0,0.4),
+        0 0 8px #ffcc00aa, 
+        inset 0 -1px 2px #552200,
+        inset 1px 1px 2px rgba(255,255,255,0.5);
+    }
+
+    .crystal-glint {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      background: radial-gradient(ellipse at 35% 20%, rgba(255,255,255,0.15) 0%, transparent 60%);
+      box-shadow: inset 0 0 1px rgba(255,255,255,0.15), inset 0 -2px 3px rgba(0,0,0,0.2);
+    }
+
+    .analog-digits {
+      position: absolute;
+      bottom: 14px;
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 3px;
+      color: #00e5ff;
+      text-shadow: 0 0 8px #00ffffcc, 0 0 3px #00ffff;
+      z-index: 6;
+    }
+
+    .data-source {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .data-source span {
+      color: #00e5ff;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+
+    .controls button {
+      background: #333;
+      color: #ccc;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .controls button:hover {
+      background: #444;
+      color: #fff;
+    }
+
+    .controls button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="gauge-wrapper">
+    <div class="gauge">
+      <div class="bezel">
+        <div class="screw screw-1"></div>
+        <div class="screw screw-2"></div>
+        <div class="screw screw-3"></div>
+        <div class="screw screw-4"></div>
+        <div class="screw screw-5"></div>
+        <div class="screw screw-6"></div>
+      </div>
+      <div class="inner-gauge">
+        <div class="dial"></div>
+        <div class="tick-marks">
+          <div class="tick major tick-0"></div>
+          <div class="tick minor tick-10"></div>
+          <div class="tick minor tick-20"></div>
+          <div class="tick major tick-25"></div>
+          <div class="tick minor tick-30"></div>
+          <div class="tick minor tick-40"></div>
+          <div class="tick major tick-50"></div>
+          <div class="tick minor tick-60"></div>
+          <div class="tick minor tick-70"></div>
+          <div class="tick major tick-75"></div>
+          <div class="tick minor tick-80"></div>
+          <div class="tick minor tick-90"></div>
+          <div class="tick major tick-100"></div>
+        </div>
+        <div class="needle-container">
+          <div class="needle-body" id="needle"></div>
+        </div>
+        <div class="center-jewel"></div>
+        <div class="crystal-glint"></div>
+        <div class="analog-digits" id="digitDisplay">--</div>
+      </div>
+    </div>
+    <div class="data-source">Data: <span id="dataSource">Initializing...</span></div>
+    <div class="controls">
+      <button onclick="fetchData()">Fetch Data</button>
+      <button onclick="simulateData()">Random</button>
+      <button onclick="calibrate()">Calibrate</button>
+    </div>
+  </div>
+
+  <script>
+    function animateNeedle(value, delay = 0) {
+      const angle = (value / 100) * 180 - 90;
+      const needle = document.getElementById("needle");
+      
+      setTimeout(() => {
+        needle.style.transition = 'transform 1.4s cubic-bezier(0.23, 1.5, 0.32, 1)';
+        needle.style.transform = `rotate(${angle}deg)`;
+        document.getElementById("digitDisplay").textContent = value.toString().padStart(2, '0');
+      }, delay);
+    }
+
+    // Simulate fetching data from an API
+    function fetchData() {
+      document.getElementById("dataSource").textContent = "Fetching...";
+      
+      // Simulate API call with setTimeout
+      setTimeout(() => {
+        // In real implementation:
+        // fetch('https://your-supabase-url.io/data')
+        //   .then(res => res.json())
+        //   .then(data => {
+        //     animateNeedle(data.value);
+        //     document.getElementById("dataSource").textContent = "API";
+        //   });
+        
+        // Simulated response
+        const simulatedApiValue = Math.floor(Math.random() * 100);
+        animateNeedle(simulatedApiValue);
+        document.getElementById("dataSource").textContent = "API (Simulated)";
+      }, 1000);
+    }
+
+    // Random value generation
+    function simulateData() {
+      const val = Math.floor(Math.random() * 100);
+      animateNeedle(val);
+      document.getElementById("dataSource").textContent = "Random";
+    }
+
+    // Calibration sequence with pre-spin
+    function calibrate() {
+      const needle = document.getElementById("needle");
+      document.getElementById("dataSource").textContent = "Calibrating...";
+      document.getElementById("digitDisplay").textContent = "--";
+      
+      // Pre-spin to 270 degrees
+      needle.style.transition = 'transform 0.8s ease-out';
+      needle.style.transform = 'rotate(270deg)';
+      
+      // Smooth return to zero
+      setTimeout(() => {
+        animateNeedle(0, 600);
+        document.getElementById("dataSource").textContent = "Calibrated";
+      }, 800);
+    }
+
+    // Initial calibration on load
+    window.addEventListener('load', () => {
+      calibrate();
+    });
+
+    // Auto-fetch every 5 seconds
+    setInterval(() => {
+      if (document.getElementById("dataSource").textContent !== "Calibrating...") {
+        simulateData();
+      }
+    }, 5000);
+  </script>
+</body>
+</html>
